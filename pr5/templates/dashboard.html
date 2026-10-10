@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>API-интеграции</title>
+    <style>
+        body { max-width: 900px; margin: 40px auto; padding: 0 20px; font: 16px system-ui, sans-serif; background: #f5f7fb; color: #172033; }
+        h1 { color: #3157b7; }
+        .card { background: white; padding: 18px; margin: 12px 0; border-radius: 12px; box-shadow: 0 2px 10px #0001; }
+        li { margin: 8px 0; }
+        code { background: #eef2ff; padding: 3px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Система учета API-интеграций</h1>
+    <p>Сервисы, API, ключи, запросы и пользователи</p>
+
+    <section class="card">
+        <h2>Сервисы</h2>
+        <ul>
+            {% for service in services %}
+                <li>
+                    <strong>{{ service.name }}</strong> —
+                    <a href="{{ service.url }}">{{ service.url }}</a>
+                    <ul>
+                        {% for api in service.apis.all %}
+                            <li>{{ api.name }} ({{ api.version }}) — <code>{{ api.endpoint }}</code></li>
+                        {% empty %}
+                            <li>API пока не добавлены.</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% empty %}
+                <li>Нет сервисов.</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Последние запросы</h2>
+        <ul>
+            {% for item in requests %}
+                <li><strong>{{ item.method }}</strong> {{ item.api.endpoint }} — {{ item.status_code }}, {{ item.user }}</li>
+            {% empty %}
+                <li>Запросов пока нет.</li>
+            {% endfor %}
+        </ul>
+    </section>
+</body>
+</html>
